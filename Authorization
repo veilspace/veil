@@ -206,11 +206,13 @@ const SUPABASE_PUBLISHABLE_KEY = "sb_publishable_YzTt8hzawZ8_80hL9mJwgA_D16y1cCE
         `${SUPABASE_URL}/rest/v1/veil_messages`,
         {
           method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-            "apikey": SUPABASE_PUBLISHABLE_KEY,
-            "Authorization": `Bearer ${SUPABASE_PUBLISHABLE_KEY}`,
-            "Prefer": "return=minimal"
+          
+headers: {
+  "Content-Type": "application/json",
+  "apikey": SUPABASE_PUBLISHABLE_KEY,
+  "Prefer": "return=minimal"
+},
+
           },
           body: JSON.stringify({
             message: message,
