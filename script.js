@@ -5,7 +5,7 @@ document.addEventListener("DOMContentLoaded", () => {
     name: "pxtiphh._", // ใส่ชื่อเจ้าของลิงก์ที่นี่
     handle: "@your_username",
     bio: "เขียนข้อความถึงเราได้ที่นี่",
-    avatarUrl: "image4/kk.jpg" // ใส่ URL ของรูปโปรไฟล์เจ้าของลิงก์ที่นี่ (ถ้าไม่มีให้เว้นว่าง),
+    avatarUrl: "kk.jpg" // ใส่ URL ของรูปโปรไฟล์เจ้าของลิงก์ที่นี่ (ถ้าไม่มีให้เว้นว่าง),
   };
 
   const home = document.getElementById("home");
