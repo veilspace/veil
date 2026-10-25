@@ -1,4 +1,3 @@
-
 document.addEventListener("DOMContentLoaded", () => {
   const SUPABASE_URL = "https://syuwgevbyxnpowbizvdc.supabase.co";
 const SUPABASE_PUBLISHABLE_KEY = "sb_publishable_YzTt8hzawZ8_80hL9mJwgA_D16y1cCE";
