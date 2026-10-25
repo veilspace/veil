@@ -7,7 +7,7 @@ const SUPABASE_PUBLISHABLE_KEY = "sb_publishable_YzTt8hzawZ8_80hL9mJwgA_D16y1cCE
     name: "pxtiphh._", // ใส่ชื่อเจ้าของลิงก์ที่นี่
     handle: "@your_username",
     bio: "เขียนข้อความถึงเราได้ที่นี่",
-    avatarUrl: "image4/kk.jpg" // ใส่ URL ของรูปโปรไฟล์เจ้าของลิงก์ที่นี่ (ถ้าไม่มีให้เว้นว่าง),
+    avatarUrl: "image4/zkk.jpg" // ใส่ URL ของรูปโปรไฟล์เจ้าของลิงก์ที่นี่ (ถ้าไม่มีให้เว้นว่าง),
   };
 
   const home = document.getElementById("home");
