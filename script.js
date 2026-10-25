@@ -1,4 +1,3 @@
-
 document.addEventListener("DOMContentLoaded", () => {
   const SUPABASE_URL = "https://syuwgevbyxnpowbizvdc.supabase.co";
 const SUPABASE_PUBLISHABLE_KEY = "sb_publishable_YzTt8hzawZ8_80hL9mJwgA_D16y1cCE";
@@ -7,7 +6,7 @@ const SUPABASE_PUBLISHABLE_KEY = "sb_publishable_YzTt8hzawZ8_80hL9mJwgA_D16y1cCE
     name: "pxtiphh._", // ใส่ชื่อเจ้าของลิงก์ที่นี่
     handle: "@your_username",
     bio: "เขียนข้อความถึงเราได้ที่นี่",
-    avatarUrl: "zkk.jpg" // ใส่ URL ของรูปโปรไฟล์เจ้าของลิงก์ที่นี่ (ถ้าไม่มีให้เว้นว่าง),
+    avatarUrl: "image4/zkk.jpg" // ใส่ URL ของรูปโปรไฟล์เจ้าของลิงก์ที่นี่ (ถ้าไม่มีให้เว้นว่าง),
   };
 
   const home = document.getElementById("home");
@@ -159,7 +158,9 @@ const SUPABASE_PUBLISHABLE_KEY = "sb_publishable_YzTt8hzawZ8_80hL9mJwgA_D16y1cCE
   senderInput.addEventListener("input", clearError);
 
     // แสดงตัวอย่างในหน้าเว็บเท่านั้น โดยไม่ส่งข้อมูลไปเซิร์ฟเวอร์
-  messageForm.addEventListener("submit", (event) => {
+  
+  // บันทึกข้อความลง Supabase จริง
+  messageForm.addEventListener("submit", async (event) => {
     event.preventDefault();
     clearError();
 
@@ -180,18 +181,69 @@ const SUPABASE_PUBLISHABLE_KEY = "sb_publishable_YzTt8hzawZ8_80hL9mJwgA_D16y1cCE
       return;
     }
 
-    if (selectedMode === "named" && !senderInput.value.trim()) {
+    if (
+      selectedMode === "named" &&
+      !senderInput.value.trim()
+    ) {
       showError("กรุณากรอกชื่อที่ต้องการแสดง หรือเลือกไม่เปิดเผยชื่อ");
       senderInput.focus();
       return;
     }
 
-    previewMessage.textContent = message;
-    previewSender.textContent = selectedMode === "named"
+    const sender = selectedMode === "named"
       ? senderInput.value.trim()
       : "ไม่เปิดเผยชื่อ";
-    showPage("result");
+
+    const submitButton = messageForm.querySelector(
+      'button[type="submit"], input[type="submit"]'
+    );
+
+    if (submitButton) submitButton.disabled = true;
+
+    try {
+      const response = await fetch(
+        `${SUPABASE_URL}/rest/v1/veil_messages`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            "apikey": SUPABASE_PUBLISHABLE_KEY,
+            "Authorization": `Bearer ${SUPABASE_PUBLISHABLE_KEY}`,
+            "Prefer": "return=minimal"
+          },
+          body: JSON.stringify({
+            message: message,
+            sender: sender
+          })
+        }
+      );
+
+      if (!response.ok) {
+        const errorDetails = await response.text();
+        console.error("Supabase insert error:", response.status, errorDetails);
+        throw new Error(
+          response.status === 401 || response.status === 403
+            ? "Supabase ไม่อนุญาตให้บันทึกข้อความ กรุณาตรวจสอบสิทธิ์ตาราง"
+            : "บันทึกข้อความไม่สำเร็จ กรุณาลองใหม่"
+        );
+      }
+
+      previewMessage.textContent = message;
+      previewSender.textContent = sender;
+      showPage("result");
+
+    } catch (error) {
+      console.error("ส่งข้อความไม่สำเร็จ:", error);
+      showError(
+        error.message === "Failed to fetch"
+          ? "เชื่อมต่อ Supabase ไม่สำเร็จ กรุณาตรวจสอบการเชื่อมต่อ"
+          : error.message || "เกิดข้อผิดพลาด กรุณาลองใหม่"
+      );
+    } finally {
+      if (submitButton) submitButton.disabled = false;
+    }
   });
+
 
   // เขียนข้อความถึงคนเดิมอีกครั้ง
   againButton.addEventListener("click", () => {
